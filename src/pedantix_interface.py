@@ -3,6 +3,8 @@ import os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
+from database_handler import DatabaseHandler
+
 
 def pedantix_interface():
     drivers_path = os.path.join(os.getcwd(), "drivers")
@@ -26,4 +28,5 @@ def pedantix_interface():
 
 
 if __name__ == '__main__':
+    DatabaseHandler()
     pedantix_interface()
