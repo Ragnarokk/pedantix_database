@@ -16,6 +16,7 @@ def pedantix_interface():
     guess_area = browser.find_element(By.ID, 'guess')
     guess_button = browser.find_element(By.ID, 'guess-btn')
     dial_close = browser.find_element(By.ID, 'dialog-close')
+    error_field = browser.find_element(By.ID, 'error')
 
     dial_close.click()
 
@@ -25,6 +26,13 @@ def pedantix_interface():
 
         guess_area.send_keys(user_guess)
         guess_button.click()
+
+        errors = error_field.text
+
+        greens = errors.count('🟩')
+        oranges = errors.count('🟧')
+
+        print(f'{greens} greens and {oranges} oranges')
 
 
 if __name__ == '__main__':
