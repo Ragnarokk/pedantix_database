@@ -5,7 +5,7 @@ from pedantix_interface import PedantixInterface
 
 def main():
     database = DatabaseHandler()
-    pedantix = PedantixInterface()
+    pedantix = PedantixInterface(database)
 
     pedantix.manual_tries()
 
