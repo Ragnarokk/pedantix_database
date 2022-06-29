@@ -1,40 +1,48 @@
 #!/usr/bin/env python3
 import os
+from typing import Tuple
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-from database_handler import DatabaseHandler
 
+class PedantixInterface:
 
-def pedantix_interface():
-    drivers_path = os.path.join(os.getcwd(), "drivers")
-    os.environ["PATH"] += os.pathsep + drivers_path
+    def __init__(self) -> None:
+        drivers_path = os.path.join(os.getcwd(), "drivers")
+        os.environ["PATH"] += os.pathsep + drivers_path
 
-    browser = webdriver.Firefox()
-    browser.get("https://cemantix.herokuapp.com/pedantix")
+        self.browser = webdriver.Firefox()
+        self.browser.get("https://cemantix.herokuapp.com/pedantix")
 
-    guess_area = browser.find_element(By.ID, 'guess')
-    guess_button = browser.find_element(By.ID, 'guess-btn')
-    dial_close = browser.find_element(By.ID, 'dialog-close')
-    error_field = browser.find_element(By.ID, 'error')
+        self.guess_area = self.browser.find_element(By.ID, 'guess')
+        self.guess_button = self.browser.find_element(By.ID, 'guess-btn')
+        self.dial_close = self.browser.find_element(By.ID, 'dialog-close')
+        self.error_field = self.browser.find_element(By.ID, 'error')
 
-    dial_close.click()
+        self.dial_close.click()
 
-    print("Guess the word")
-    while True:
-        user_guess = input(" - ")
+    def validate(self, word: str) -> Tuple[int, int]:
+        """
+        Method that tries the sent word in pedantix and that returns the number of green and oranges
+        :return: (greens, oranges)
+        """
+        self.guess_area.send_keys(word)
+        self.guess_button.click()
 
-        guess_area.send_keys(user_guess)
-        guess_button.click()
-
-        errors = error_field.text
+        errors = self.error_field.text
 
         greens = errors.count('🟩')
         oranges = errors.count('🟧')
 
-        print(f'{greens} greens and {oranges} oranges')
+        return (greens, oranges)
 
+    def manual_tries(self):
 
-if __name__ == '__main__':
-    DatabaseHandler()
-    pedantix_interface()
+        print("Guess the word")
+        while True:
+            user_guess = input(" - ")
+
+            g, o = self.validate(user_guess)
+
+            print(f'{g} greens and {o} oranges')
+
