@@ -34,11 +34,11 @@ class DatabaseHandler:
 
     def get_top_words(self, top_nb: int) -> List[str]:
         """
-        Method that selects all the first top_nb words contained in the database with the best greens/tries rate
+        Method that selects all the first top_nb words contained in the database with the best greens/tries rate if their last try was not today
         """
-        query = "SELECT word, greens / tries as rate FROM words ORDER BY rate LIMIT ?"
+        query = """SELECT word, greens / tries as rate, DATE('timestamp') as last_try, DATE('now') as today FROM words WHERE last_try != today ORDER BY rate LIMIT ?"""
 
         self.cursor.execute(query, (top_nb,))
         result = self.cursor.fetchall()
 
-        return [word for word, _ in result]
+        return [sel[0] for sel in result]

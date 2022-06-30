@@ -7,6 +7,9 @@ def main():
     database = DatabaseHandler()
     pedantix = PedantixInterface(database)
 
+    words = database.get_top_words(100)
+    print('top words : ', words)
+
     pedantix.manual_tries()
 
 
