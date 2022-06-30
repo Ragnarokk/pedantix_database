@@ -1,4 +1,5 @@
 import sqlite3
+from typing import List
 
 CREATE_WORDS_TABLE = '''CREATE TABLE IF NOT EXISTS words(''' \
                         '''word     CHAR(50) PRIMARY KEY NOT NULL,''' \
@@ -17,7 +18,7 @@ class DatabaseHandler:
 
         self.tried_words = set()
 
-    def insert_word(self, word: str, greens: int, oranges: int):
+    def insert_word(self, word: str, greens: int, oranges: int) -> None:
         """
         Method that inserts a new word into the database
         """
@@ -30,3 +31,14 @@ class DatabaseHandler:
             self.connection.commit()
 
             self.tried_words.add(word)
+
+    def get_top_words(self, top_nb: int) -> List[str]:
+        """
+        Method that selects all the first top_nb words contained in the database with the best greens/tries rate
+        """
+        query = "SELECT word, greens / tries as rate FROM words ORDER BY rate LIMIT ?"
+
+        self.cursor.execute(query, (top_nb,))
+        result = self.cursor.fetchall()
+
+        return [word for word, _ in result]
