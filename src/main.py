@@ -10,6 +10,13 @@ def main():
     words = database.get_top_words(100)
     print('top words : ', words)
 
+    tries = []
+    for word in words:
+        g, o = pedantix.validate(word)
+        tries.append((word, g, o))
+
+    database.update_tries(tries)
+
     pedantix.manual_tries()
 
 

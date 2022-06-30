@@ -34,6 +34,7 @@ class PedantixInterface:
         self.guess_button.click()
 
         errors = self.error_field.text
+        print(word + ' : ' + errors)
 
         greens = errors.count('🟩')
         oranges = errors.count('🟧')

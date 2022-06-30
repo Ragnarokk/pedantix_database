@@ -1,5 +1,5 @@
 import sqlite3
-from typing import List
+from typing import List, Tuple
 
 CREATE_WORDS_TABLE = '''CREATE TABLE IF NOT EXISTS words(''' \
                         '''word     CHAR(50) PRIMARY KEY NOT NULL,''' \
@@ -42,3 +42,13 @@ class DatabaseHandler:
         result = self.cursor.fetchall()
 
         return [sel[0] for sel in result]
+
+    def update_tries(self, tries: List[Tuple[str, int, int]]):
+        """
+        Method that adds a new try on the database following a list of tuples describing (word, greens, oranges)
+        """
+        update_query = "UPDATE words SET tries = tries + 1, greens = greens + ?, oranges = oranges + ?, timestamp = CURRENT_TIMESTAMP WHERE word = ?"
+
+        self.cursor.executemany(update_query, tries)
+
+        self.connection.commit()
