@@ -38,7 +38,7 @@ class PedantixInterface:
         greens = errors.count('🟩')
         oranges = errors.count('🟧')
 
-        if greens + oranges > 0 or errors.count('🟥'):
+        if greens + oranges > 0 or errors.count('🟥') > 0:
             return (greens, oranges)
         else:
             return None
