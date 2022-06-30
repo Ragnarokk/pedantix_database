@@ -52,3 +52,5 @@ class DatabaseHandler:
         self.cursor.executemany(update_query, tries)
 
         self.connection.commit()
+
+        self.tried_words.update([word[0] for word in tries])
